@@ -1,0 +1,194 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rishi's Semester Planner</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4a90e2" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rishi Planner">
+  <link rel="apple-touch-icon" href="icon.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #4a90e2;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section h2 {
+      color: #333;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.5rem;
+    }
+    #live-time, #notification, #today-plan, #motivation {
+      background: #eaf4ff;
+      padding: 1rem;
+      border-left: 5px solid #4a90e2;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+    }
+    th {
+      background: #4a90e2;
+      color: white;
+    }
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      margin-top: 1rem;
+    }
+    footer {
+      background: #4a90e2;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rishi's Semester Planner</h1>
+    <p>July 3 – September 30, 2025</p>
+  </header>
+  <div class="container">
+    <div class="section">
+      <h2>Live Clock & Notifications</h2>
+      <div id="live-time">Time loading...</div>
+      <div id="notification">Waiting for alert...</div>
+    </div>
+    <div class="section">
+      <h2>Daily Motivation</h2>
+      <div id="motivation">Loading...</div>
+    </div>
+    <div class="section">
+      <h2>Today's Plan</h2>
+      <div id="today-plan">Click below to view:</div>
+      <button onclick="showTodayPlan()">Show Today's Work</button>
+    </div>
+    
+    <div class="section">
+      <h2>Daily Hour-by-Hour Schedule</h2>
+      <table>
+        <tr><th>Time</th><th>Activity</th></tr>
+        <tr><td>5:30 – 6:30</td><td>Wake up, Meditation</td></tr>
+        <tr><td>6:30 – 7:30</td><td>Workout</td></tr>
+        <tr><td>7:30 – 8:00</td><td>Bath + Breakfast</td></tr>
+        <tr><td>8:30 – 11:40</td><td>College Classes</td></tr>
+<tr><td>11:40 – 1:10</td><td>Universal Human Values (Thursday)</td></tr>
+        <tr><td>1:00 – 2:00</td><td>Lunch + Rest</td></tr>
+        <tr><td>2:00 – 4:20</td><td>Projects / Skills / Classes</td></tr>
+        <tr><td>5:00 – 6:00</td><td>Tea Break</td></tr>
+        <tr><td>6:00 – 7:30</td><td>Evening Class / YouTube</td></tr>
+        <tr><td>7:45 – 9:00</td><td>Dinner</td></tr>
+        <tr><td>9:00 – 10:00</td><td>Reflection + Study</td></tr>
+        <tr><td>10:00</td><td>Sleep</td></tr>
+      </table>
+    </div>
+  </div>
+  <footer>
+    I AM ALWAYS WITH YOU ❤️<br>
+    ALWAYS BE HAPPY ☀️<br>
+    FAMILY IS WAITING TO SEE YOUR SUCCESS 👨‍👩‍👧‍👦<br>
+    YOU ARE DOING THIS FOR YOUR DREAMS AND FAMILY CARES FOR YOUR OWN HAPPINESS 💪
+  </footer>
+  <script>
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+    function notifyUser(msg) {
+      if (Notification.permission === 'granted') {
+        new Notification('⏰ Rishi Planner', { body: msg });
+      }
+    }
+    function updateTimeAndNotify() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('live-time').innerText = `Current Time: ${h}:${m}:${s}`;
+      const alerts = {
+        '05:30': 'Wake up, Journal, Meditate',
+        '06:30': 'Workout time!',
+        '07:30': 'Breakfast + Bath',
+        '08:30': 'Morning Classes Begin',
+        '13:00': 'Lunch + Rest',
+        '14:00': 'AI / DSA Time',
+        '17:00': 'Tea Break ☕',
+        '18:00': 'Projects / Editing',
+        '19:45': 'Dinner Time 🍽',
+        '21:00': 'Night Study + Reflection',
+        '22:00': 'Sleep Now 😴'
+      };
+      const current = `${h}:${m}`;
+      if (alerts[current]) {
+        document.getElementById('notification').innerText = alerts[current];
+        notifyUser(alerts[current]);
+      }
+      const quotes = [
+        "Your family believes in you. Don’t let them down.",
+        "You were born to rise. Let today be your step forward.",
+        "Success is the best thank-you you can give your parents.",
+        "Trust the grind. It will pay off.",
+        "Your dreams are valid. Act like they matter.",
+        "Every second of focus is a gift to your future self."
+      ];
+      const day = new Date().getDate() % quotes.length;
+      document.getElementById('motivation').innerText = quotes[day];
+    }
+    function showTodayPlan() {
+      const d = new Date().getDay();
+      const plans = {
+        0: 'Sunday: Reflect, Plan, Rest',
+        1: 'Monday:  Class + Slot A11 (8:30AM -10) B11(10.5-1135)  C11(11:40-1 :10PM)B21 (4:25–5:55)',
+        2: 'Tuesday: Class D11 (8:30AM -10)F11(11:40-1 :10PM)E14 (2:50–4:20), F21 (6–7:30)',
+        3: 'Wednesday: Class A12 (8:30AM -10) B12(10.5-1135) C12(11:40-1 :10PM) B14(2:50-4:20)B22 (4:25–5:55) A24 (6–7:30)',
+        4: 'Thrusday:Class UHV (11:40–1:10), then Focus on AI + Anime',
+        5: 'Friday: A13 (8:30AM -10) B13(10.5-1135)  C13(11:40-1 :10PM)B24 (4:25–5:55)',
+        6: 'Saturday: Check Academic Calendar Schedule'
+      };
+      document.getElementById('today-plan').innerText = plans[d];
+    }
+    setInterval(updateTimeAndNotify, 1000);
+  </script>
+</body>
+</html>
